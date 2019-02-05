@@ -286,3 +286,166 @@ function WorkingTriangles($array){
 
 	return $sum;
 }
+
+echo "<br>";
+
+		/*		2017		*/
+		EnterInput3($input3);
+
+		/*		2016		*/
+	EnterInput4($input4);
+
+
+function EnterInput3($input){
+
+	$Numbers = str_split($input);
+
+	echo "<br> Correct number is: ".getSum1($Numbers);
+	echo "<br> Correct number is: ".getSum2($Numbers);
+
+}
+
+function EnterInput4($input){
+
+	$directions = explode(',' , $input);
+
+	$Results = BunnyHQ1($directions);
+
+	echo "<br><br>"."Distance to HQ Part 1: ".$Results[0];
+	echo "<br> Distance to HQ Part 2: ".DoubleStep($Results[1], $Results[2]);
+
+}
+
+		/*		2017		*/
+
+		function getSum1($array){
+
+			$test = 0;
+			$sum = 0;
+			
+				for($counter = 0; $counter<count($array); $counter++){
+					if($array[$counter]== $test){
+						$sum += $test;
+				}
+				$test = $array[$counter];
+					}
+					if($array[0]==$array[count($array)-1]){
+						$sum +=$array[count($array)-1];
+					}
+					return $sum;
+			}
+			
+			function getSum2($array){
+			
+				$sum = 0;
+			
+					for($counter = 0; $counter<count($array); $counter++){
+						if($array[$counter]== $array[($counter+(count($array)/2))%count($array)]){
+							$sum += $array[$counter];
+					}		
+				}
+				return $sum;
+			}
+			
+					/*		2016	Day1	*/
+					
+			function BunnyHQ1($array){
+			
+			
+				$Xaxis = 0;
+				$Yaxis = 0;
+				$Steps = 0;
+				
+				$Direction = 1;
+				$Xcoordinate = array();
+				$Ycoordinate = array();
+			
+				for($counter = 0; $counter<count($array); $counter++){
+						
+						if($array[$counter][1] == 'R'){
+							$Direction++;
+							if($Direction == 4){
+								$Direction = 0;
+							}
+						}else {
+							$Direction--;
+							if($Direction == -1){
+								$Direction = 3;
+							}
+						}
+			
+					
+						$Walk= (int) filter_var($array[$counter], FILTER_SANITIZE_NUMBER_INT);
+			
+						for($count = 0; $count<$Walk; $count++){
+						
+			
+						switch ($Direction){
+			
+						case 0:
+							$Xcoordinate[$Steps] = $Xaxis--;
+							$Ycoordinate[$Steps] = $Yaxis;
+							$Steps++;
+							break;
+			
+						case 1:
+							$Ycoordinate[$Steps] = $Yaxis++;
+							$Xcoordinate[$Steps] = $Xaxis;
+							$Steps++;
+							break;
+			
+						case 2:
+							$Xcoordinate[$Steps] = $Xaxis++;
+							$Ycoordinate[$Steps] = $Yaxis;
+							$Steps++;
+							break;
+			
+						case 3:
+							$Ycoordinate[$Steps] = $Yaxis--;
+							$Xcoordinate[$Steps] = $Xaxis;
+							$Steps++;
+							break;
+						}
+			
+					}
+					
+			
+				}
+					$Xaxis = Positive($Xaxis);
+					$Yaxis = Positive($Yaxis);
+			
+				$sum = $Xaxis + $Yaxis;
+			
+				$Results = array($sum, $Xcoordinate, $Ycoordinate);
+				
+			
+				return $Results;
+			}
+			
+			
+			function Positive($Value){
+			
+				if($Value<0){
+						$Value= $Value*-1;
+					}
+					return $Value;
+			}
+			
+			
+			function DoubleStep($X,$Y){
+			
+				$Distance = 0;
+			
+				for($C = 0; $C<count($X); $C++){
+					for($Z = 0; $Z<$C; $Z++){
+					if($X[$C]==$X[$Z] && $Y[$C]==$Y[$Z]){
+								
+						$Distance= Positive($X[$Z])+Positive($Y[$Z]);
+						return $Distance;
+			
+						}
+					}
+				}
+			}
+			
+			
